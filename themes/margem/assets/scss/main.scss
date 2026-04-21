@@ -153,6 +153,39 @@ img {
   &:hover { background: var(--bg-hover); }
 }
 
+.post-card--cover {
+  padding: 0 0 4px;
+  margin: 0 0;
+  overflow: hidden;
+
+  &:first-child { border-top: 1px solid var(--border); }
+
+  .post-card-body {
+    padding: 16px 16px 18px;
+    margin: 0 -0px;
+  }
+
+  &:hover { background: var(--bg-hover); }
+}
+
+.post-card-image {
+  width: 100%;
+  aspect-ratio: 16/7;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+}
+
+.post-card--cover:hover .post-card-image img {
+  transform: scale(1.02);
+}
+
 .post-card-top {
   display: flex;
   align-items: baseline;

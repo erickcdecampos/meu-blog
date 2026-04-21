@@ -1,20 +1,36 @@
 {{- $isAlbum := eq .Section "fotografia" -}}
-<a class="post-card" href="{{ .RelPermalink }}">
-  <div class="post-card-top">
-    <span class="post-card-tag{{ if $isAlbum }} tag-album{{ end }}">
-      {{- if $isAlbum }}Álbum{{ else }}Post{{ end -}}
-    </span>
-    <span class="post-card-meta">
-      {{ .Date.Format "02 jan 2006" }}
-      {{- if $isAlbum }}
-        {{- with .Params.photos_count }} · {{ . }} fotos{{ end }}
-      {{- else }}
-        {{- if .ReadingTime }} · {{ .ReadingTime }} min{{ end }}
-      {{- end }}
-    </span>
+{{- $img := "" -}}
+{{- with .Params.image -}}
+  {{- $res := $.Resources.Get . -}}
+  {{- if $res -}}
+    {{- $img = ($res.Fill "640x360 Center").RelPermalink -}}
+  {{- else -}}
+    {{- $img = . | relURL -}}
+  {{- end -}}
+{{- end -}}
+<a class="post-card{{ if $img }} post-card--cover{{ end }}" href="{{ .RelPermalink }}">
+  {{- if $img }}
+  <div class="post-card-image">
+    <img src="{{ $img }}" alt="{{ .Title }}" loading="lazy">
   </div>
-  <div class="post-card-title">{{ .Title }}</div>
-  {{- with .Summary }}
-  <div class="post-card-excerpt">{{ . | plainify | truncate 140 }}</div>
   {{- end }}
+  <div class="post-card-body">
+    <div class="post-card-top">
+      <span class="post-card-tag{{ if $isAlbum }} tag-album{{ end }}">
+        {{- if $isAlbum }}Álbum{{ else }}Post{{ end -}}
+      </span>
+      <span class="post-card-meta">
+        {{ .Date.Format "02 jan 2006" }}
+        {{- if $isAlbum }}
+          {{- with .Params.photos_count }} · {{ . }} fotos{{ end }}
+        {{- else }}
+          {{- if .ReadingTime }} · {{ .ReadingTime }} min{{ end }}
+        {{- end }}
+      </span>
+    </div>
+    <div class="post-card-title">{{ .Title }}</div>
+    {{- with .Summary }}
+    <div class="post-card-excerpt">{{ . | plainify | truncate 140 }}</div>
+    {{- end }}
+  </div>
 </a>
