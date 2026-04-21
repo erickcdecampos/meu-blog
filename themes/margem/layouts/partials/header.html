@@ -1,0 +1,16 @@
+<header class="site-header">
+  <div class="container">
+    <a class="site-name" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+    <nav class="site-nav">
+      {{ range .Site.Menus.main }}
+        {{- if eq .Name "Fotografia" }}
+        <span class="nav-sep"></span>
+        {{- end }}
+        <a href="{{ .URL }}"
+           {{ if or (eq $.RelPermalink .URL) (and (ne .URL "/") (hasPrefix $.RelPermalink .URL)) }}class="active"{{ end }}>
+          {{ .Name }}
+        </a>
+      {{ end }}
+    </nav>
+  </div>
+</header>

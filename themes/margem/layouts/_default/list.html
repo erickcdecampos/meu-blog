@@ -1,0 +1,11 @@
+{{ define "main" }}
+  <h1 class="section-title">{{ .Title }}</h1>
+
+  {{ range .Pages.ByDate.Reverse }}
+    {{ if not .Draft }}
+      {{ partial "post-card.html" . }}
+    {{ end }}
+  {{ end }}
+
+  {{ template "_internal/pagination.html" . }}
+{{ end }}

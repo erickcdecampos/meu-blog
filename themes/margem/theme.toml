@@ -1,0 +1,9 @@
+name = "margem"
+license = "MIT"
+licenselink = ""
+description = "Tema Hugo pessoal — orgânico, tipográfico, para escrita e fotografia"
+homepage = ""
+min_version = "0.120.0"
+
+[author]
+  name = "Erick Coelho"

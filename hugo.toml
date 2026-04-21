@@ -1,0 +1,64 @@
+baseURL = "/"
+languageCode = "pt-br"
+title = "Erick Coelho"
+theme = "margem"
+[pagination]
+  pagerSize = 10
+
+[params]
+  description = "Blog pessoal"
+  mainSections = ["posts", "fotografia"]
+
+[params.author]
+  name = "Erick Coelho"
+  email = ""
+
+[params.footer]
+  since = 2021
+
+[params.dateFormat]
+  published = "02/01/2006"
+  lastUpdated = "02/01/2006"
+
+[params.sidebar]
+  compact = false
+
+[params.article]
+  readingTime = true
+  toc = true
+
+  [params.article.license]
+    enabled = false
+
+[params.colorScheme]
+  toggle = true
+  default = "auto"
+
+[params.comments]
+  enabled = false
+
+[menu]
+  [[menu.main]]
+    name = "Início"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    name = "Fotografia"
+    url = "/fotografia/"
+    weight = 3
+  [[menu.main]]
+    name = "Sobre"
+    url = "/sobre/"
+    weight = 4
+  [[menu.main]]
+    name = "Links"
+    url = "/links/"
+    weight = 5
+  [[menu.main]]
+    name = "Instante"
+    url = "/now/"
+    weight = 6

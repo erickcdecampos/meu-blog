@@ -1,0 +1,15 @@
+{{- $cover := .Resources.GetMatch "capa.*" | default (.Resources.GetMatch "cover.*") -}}
+<a class="album-card" href="{{ .RelPermalink }}">
+  {{- if $cover }}
+    <img class="album-card-img" src="{{ ($cover.Resize "480x webp").RelPermalink }}" alt="{{ .Title }}" loading="lazy">
+  {{- else }}
+    <div class="album-card-placeholder"></div>
+  {{- end }}
+  <div class="album-card-overlay">
+    <div class="album-card-title">{{ .Title }}</div>
+    <div class="album-card-meta">
+      {{ .Date.Format "jan 2006" }}
+      {{- with .Params.photos_count }} · {{ . }} fotos{{ end }}
+    </div>
+  </div>
+</a>

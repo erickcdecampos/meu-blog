@@ -1,0 +1,49 @@
+{{ define "main" }}
+  <!-- PhotoSwipe v5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe.css">
+  <script type="module">
+    import PhotoSwipeLightbox from 'https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe-lightbox.esm.min.js';
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#album-gallery',
+      children: 'a.photo-thumb',
+      pswpModule: () => import('https://cdn.jsdelivr.net/npm/photoswipe@5/dist/photoswipe.esm.min.js')
+    });
+    lightbox.init();
+  </script>
+
+  <a class="back-link" href="/fotografia/">Fotografia</a>
+
+  <div class="album-header">
+    <h1 class="album-title">{{ .Title }}</h1>
+    {{- with .Description }}
+    <p class="album-desc">{{ . }}</p>
+    {{- end }}
+    {{- $photos := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
+    <span class="album-stats">
+      {{ .Date.Format "jan 2006" }}
+      {{- if $photos }} · {{ len $photos }} fotos{{ else }}{{- with .Params.photos_count }} · {{ . }} fotos{{ end }}{{ end }}
+    </span>
+  </div>
+
+  {{- $photos := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
+  {{- if $photos }}
+  <div class="photos-grid" id="album-gallery">
+    {{ range $photos }}
+      {{- $thumb := .Resize "400x400 webp" }}
+      {{- $full  := .Resize "1600x webp" }}
+      <a class="photo-thumb"
+         href="{{ $full.RelPermalink }}"
+         data-pswp-width="{{ $full.Width }}"
+         data-pswp-height="{{ $full.Height }}">
+        <img src="{{ $thumb.RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+      </a>
+    {{ end }}
+  </div>
+  {{- else }}
+  <p style="color: var(--muted); font-size: 0.9rem;">Nenhuma foto encontrada neste álbum.</p>
+  {{- end }}
+
+  {{- with .Content }}
+  <div class="album-body article-body">{{ . }}</div>
+  {{- end }}
+{{ end }}

@@ -1,0 +1,11 @@
+{{ define "main" }}
+  <h1 class="section-title">Fotografia</h1>
+
+  <div class="albums-grid">
+    {{ range .Pages.ByDate.Reverse }}
+      {{ if not .Draft }}
+        {{ partial "album-card.html" . }}
+      {{ end }}
+    {{ end }}
+  </div>
+{{ end }}

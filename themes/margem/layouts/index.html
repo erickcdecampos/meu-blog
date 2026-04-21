@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <div class="feed-header">
+    <span class="feed-label">Recentes</span>
+  </div>
+
+  {{ $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+  {{ range $pages.ByDate.Reverse }}
+    {{ if not .Draft }}
+      {{ partial "post-card.html" . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
