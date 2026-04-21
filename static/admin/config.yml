@@ -20,3 +20,17 @@ collections:
       - { label: Categorias, name: categories, widget: list, required: false }
       - { label: Imagem de destaque, name: image, widget: image, required: false }
       - { label: Conteúdo, name: body, widget: markdown }
+
+  - name: albuns
+    label: Álbuns de fotografia
+    folder: content/fotografia
+    create: true
+    slug: "{{slug}}"
+    path: "{{slug}}/index"
+    fields:
+      - { label: Título, name: title, widget: string }
+      - { label: Data, name: date, widget: datetime }
+      - { label: Rascunho, name: draft, widget: boolean, default: false }
+      - { label: Descrição, name: description, widget: string, required: false }
+      - { label: Imagem de capa, name: image, widget: image, required: false, hint: "Usada no card da home e na listagem de fotografia" }
+      - { label: Texto do álbum, name: body, widget: markdown, required: false, hint: "Opcional — aparece abaixo das fotos" }
