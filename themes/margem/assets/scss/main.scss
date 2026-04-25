@@ -2,20 +2,23 @@
 // VARIÁVEIS
 // ============================================================
 :root {
-  --bg:         #EDEAE4;
-  --bg-card:    #E5E1DA;
+  --bg:         #E8E3DC;
   --bg-hover:   #DEDAD2;
   --text:       #1A1714;
-  --muted:      #8B8070;
+  --muted:      #7A6E65;
   --border:     #D4CFC7;
   --accent:     #C97D5A;
   --accent-l:   #F2E6DC;
+  --card:       #FFFFFF;
+  --shadow:     0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-hover: 0 2px 6px rgba(0,0,0,0.09), 0 8px 24px rgba(0,0,0,0.08);
 
   --font-title: 'DM Serif Display', Georgia, serif;
   --font-body:  'DM Sans', system-ui, sans-serif;
 
   --container:  720px;
   --radius:     3px;
+  --radius-card: 6px;
 }
 
 // ============================================================
@@ -139,33 +142,39 @@ img {
 }
 
 // ============================================================
+// POST LIST (wrapper do feed)
+// ============================================================
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ============================================================
 // POST CARD (feed)
 // ============================================================
 .post-card {
   display: block;
-  padding: 22px 16px;
-  margin: 0 -16px;
-  border-radius: var(--radius);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.15s;
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
 
-  &:first-child { border-top: 1px solid var(--border); }
-  &:hover { background: var(--bg-hover); }
+  .post-card-body {
+    padding: 22px 24px;
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
 }
 
 .post-card--cover {
-  padding: 0 0 4px;
-  margin: 0 0;
-  overflow: hidden;
-
-  &:first-child { border-top: 1px solid var(--border); }
-
   .post-card-body {
-    padding: 16px 16px 18px;
-    margin: 0 -0px;
+    padding: 16px 24px 20px;
   }
-
-  &:hover { background: var(--bg-hover); }
 }
 
 .post-card-image {
@@ -236,6 +245,18 @@ img {
 // ============================================================
 // SINGLE POST / PAGE
 // ============================================================
+.article-wrapper {
+  background: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 80px;
+}
+
+.article-inner {
+  padding: 40px 48px 56px;
+}
+
 .article-header {
   margin-bottom: 40px;
   padding-bottom: 32px;
@@ -267,8 +288,7 @@ img {
   width: 100%;
   aspect-ratio: 16/7;
   object-fit: cover;
-  border-radius: var(--radius);
-  margin-bottom: 40px;
+  display: block;
 }
 
 .article-body {

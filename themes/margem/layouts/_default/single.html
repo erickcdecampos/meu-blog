@@ -1,20 +1,9 @@
 {{ define "main" }}
-  <article>
-    <a class="back-link" href="{{ .Section | relURL }}">
-      {{- if eq .Section "fotografia" }}Fotografia{{ else }}Posts{{ end -}}
-    </a>
+  <a class="back-link" href="{{ .Section | relURL }}">
+    {{- if eq .Section "fotografia" }}Fotografia{{ else }}Posts{{ end -}}
+  </a>
 
-    <header class="article-header">
-      <div class="article-tag">
-        {{- if eq .Section "fotografia" }}Álbum{{ else }}Post{{ end }} · {{ .Date.Format "02 jan 2006" }}
-        {{- if and (ne .Section "fotografia") .ReadingTime }} · {{ .ReadingTime }} min de leitura{{ end }}
-      </div>
-      <h1 class="article-title">{{ .Title }}</h1>
-      {{- with .Description }}
-      <p class="article-meta">{{ . }}</p>
-      {{- end }}
-    </header>
-
+  <div class="article-wrapper">
     {{- $cover := .Resources.GetMatch "capa.*" | default (.Resources.GetMatch "cover.*") }}
     {{- if not $cover }}
       {{- with .Params.image }}
@@ -25,8 +14,21 @@
     <img class="article-cover" src="{{ (.Resize "1200x webp").RelPermalink }}" alt="{{ $.Title }}">
     {{- end }}
 
-    <div class="article-body">
-      {{ .Content }}
+    <div class="article-inner">
+      <header class="article-header">
+        <div class="article-tag">
+          {{- if eq .Section "fotografia" }}Álbum{{ else }}Post{{ end }} · {{ .Date.Format "02 jan 2006" }}
+          {{- if and (ne .Section "fotografia") .ReadingTime }} · {{ .ReadingTime }} min de leitura{{ end }}
+        </div>
+        <h1 class="article-title">{{ .Title }}</h1>
+        {{- with .Description }}
+        <p class="article-meta">{{ . }}</p>
+        {{- end }}
+      </header>
+
+      <div class="article-body">
+        {{ .Content }}
+      </div>
     </div>
-  </article>
+  </div>
 {{ end }}

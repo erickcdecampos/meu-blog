@@ -3,10 +3,12 @@
     <span class="feed-label">Recentes</span>
   </div>
 
-  {{ $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
-  {{ range $pages.ByDate.Reverse }}
-    {{ if not .Draft }}
-      {{ partial "post-card.html" . }}
+  <div class="post-list">
+    {{ $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+    {{ range $pages.ByDate.Reverse }}
+      {{ if not .Draft }}
+        {{ partial "post-card.html" . }}
+      {{ end }}
     {{ end }}
-  {{ end }}
+  </div>
 {{ end }}
