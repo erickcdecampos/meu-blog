@@ -3,12 +3,12 @@
 // ============================================================
 :root {
   --bg:         #E8E3DC;
+  --bg-card:    #F0ECE6;
   --bg-hover:   #DEDAD2;
   --text:       #1A1714;
   --muted:      #7A6E65;
   --border:     #D4CFC7;
   --accent:     #C97D5A;
-  --accent-l:   #F2E6DC;
   --card:       #FFFFFF;
   --shadow:     0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.06);
   --shadow-hover: 0 2px 6px rgba(0,0,0,0.09), 0 8px 24px rgba(0,0,0,0.08);
@@ -111,6 +111,11 @@ img {
     color: var(--text);
   }
 
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
   &.active {
     color: var(--accent);
   }
@@ -168,6 +173,11 @@ img {
   &:hover {
     box-shadow: var(--shadow-hover);
     transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 }
 
@@ -295,7 +305,7 @@ img {
   font-size: 1rem;
   line-height: 1.85;
 
-  h2, h3, h4 {
+  h2, h3, h4, h5, h6 {
     font-family: var(--font-title);
     margin: 2em 0 0.6em;
     line-height: 1.25;
@@ -303,6 +313,8 @@ img {
 
   h2 { font-size: 1.45rem; }
   h3 { font-size: 1.2rem; }
+  h4 { font-size: 1.05rem; }
+  h5, h6 { font-size: 0.95rem; color: var(--muted); }
 
   p { margin-bottom: 1.4em; }
 
@@ -319,7 +331,7 @@ img {
 
   blockquote {
     border-left: 3px solid var(--accent);
-    padding: 2px 0 2px 20px;
+    padding: 10px 0 10px 20px;
     margin: 1.5em 0;
     color: var(--muted);
     font-style: italic;
@@ -485,6 +497,7 @@ img {
   margin-bottom: 32px;
 
   &:hover { color: var(--text); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   &::before { content: '←'; }
 }
@@ -508,6 +521,11 @@ img {
     &.current, &:hover {
       background: var(--bg-card);
       color: var(--text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
     }
   }
 }
@@ -540,6 +558,7 @@ img {
     font-size: 0.78rem;
     color: var(--muted);
     &:hover { color: var(--text); }
+    &:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   }
 }
 
@@ -569,6 +588,8 @@ img {
   .site-nav { gap: 0; }
 
   .article-title { font-size: 1.55rem; }
+
+  .article-inner { padding: 28px 20px 40px; }
 
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);

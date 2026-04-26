@@ -3,7 +3,7 @@
     {{- if eq .Section "fotografia" }}Fotografia{{ else }}Posts{{ end -}}
   </a>
 
-  <div class="article-wrapper">
+  <article class="article-wrapper">
     {{- $cover := .Resources.GetMatch "capa.*" | default (.Resources.GetMatch "cover.*") }}
     {{- if not $cover }}
       {{- with .Params.image }}
@@ -11,7 +11,7 @@
       {{- end }}
     {{- end }}
     {{- with $cover }}
-    <img class="article-cover" src="{{ (.Resize "1200x webp").RelPermalink }}" alt="{{ $.Title }}">
+    <img class="article-cover" src="{{ (.Resize "1200x webp").RelPermalink }}" alt="{{ $.Title }}" loading="eager" sizes="(max-width: 640px) 100vw, 720px">
     {{- end }}
 
     <div class="article-inner">
@@ -30,5 +30,5 @@
         {{ .Content }}
       </div>
     </div>
-  </div>
+  </article>
 {{ end }}

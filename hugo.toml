@@ -11,31 +11,9 @@ theme = "margem"
 
 [params.author]
   name = "Erick Coelho"
-  email = ""
 
 [params.footer]
   since = 2021
-
-[params.dateFormat]
-  published = "02/01/2006"
-  lastUpdated = "02/01/2006"
-
-[params.sidebar]
-  compact = false
-
-[params.article]
-  readingTime = true
-  toc = true
-
-  [params.article.license]
-    enabled = false
-
-[params.colorScheme]
-  toggle = true
-  default = "auto"
-
-[params.comments]
-  enabled = false
 
 [menu]
   [[menu.main]]
