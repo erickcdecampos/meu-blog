@@ -369,19 +369,54 @@ img {
 // ============================================================
 // FOTOGRAFIA — LISTA DE ÁLBUNS
 // ============================================================
+.foto-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.foto-title {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+}
+
+.foto-meta {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
 .albums-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 2px;
-  margin-top: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 230px;
+  grid-auto-flow: dense;
+  gap: 3px;
 }
 
 .album-card {
   display: block;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4/3;
   background: var(--bg-card);
+
+  // Primeiro álbum: destaque — 2 colunas × 2 linhas
+  &:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  // Álbum único: ocupa toda a largura, proporção panorâmica
+  &:only-child {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
 
   &:hover .album-card-overlay { opacity: 1; }
   &:hover .album-card-img { transform: scale(1.04); }
@@ -391,7 +426,7 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .album-card-placeholder {
@@ -403,27 +438,31 @@ img {
 .album-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 30%, rgba(26, 23, 20, 0.75));
-  opacity: 0.85;
-  transition: opacity 0.2s;
+  background: linear-gradient(to top, rgba(26, 23, 20, 0.72) 0%, rgba(26, 23, 20, 0.15) 45%, transparent 70%);
+  opacity: 0.9;
+  transition: opacity 0.25s;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 16px;
+  padding: 18px 20px;
 }
 
 .album-card-title {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: #fff;
   line-height: 1.25;
   margin-bottom: 4px;
 }
 
+.album-card:first-child .album-card-title {
+  font-size: 1.35rem;
+}
+
 .album-card-meta {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 0.04em;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.72);
+  letter-spacing: 0.05em;
 }
 
 // ============================================================
@@ -452,28 +491,32 @@ img {
   letter-spacing: 0.08em;
 }
 
+// Grid masonry em linha — proporcões naturais, sem espaços, ordem esquerda→direita
 .photos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 3px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 4px;
+  gap: 4px;
+  align-items: start;
 }
 
 .photo-thumb {
   display: block;
-  aspect-ratio: 1;
-  overflow: hidden;
   cursor: pointer;
-  background: var(--bg-card);
+  overflow: hidden;
 
   img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.25s ease;
+    height: auto;
+    display: block;
+    transition: opacity 0.2s, transform 0.3s ease;
     margin: 0;
     border-radius: 0;
 
-    &:hover { transform: scale(1.05); }
+    &:hover {
+      opacity: 0.88;
+      transform: scale(1.02);
+    }
   }
 }
 
@@ -593,6 +636,18 @@ img {
 
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 180px;
+  }
+
+  // No mobile: primeiro álbum ocupa linha inteira (1 linha, não 2)
+  .album-card:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  .album-card:only-child {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 
   .photos-grid {

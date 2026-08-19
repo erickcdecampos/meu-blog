@@ -1,11 +1,15 @@
 {{ define "main" }}
-  <h1 class="section-title">Fotografia</h1>
+  {{- $albums := where .Pages "Draft" false }}
+  <header class="foto-header">
+    <h1 class="foto-title">Fotografia</h1>
+    <span class="foto-meta">
+      {{ len $albums }}&thinsp;{{ if eq (len $albums) 1 }}álbum{{ else }}álbuns{{ end }}
+    </span>
+  </header>
 
   <div class="albums-grid">
-    {{ range .Pages.ByDate.Reverse }}
-      {{ if not .Draft }}
-        {{ partial "album-card.html" . }}
-      {{ end }}
+    {{ range $albums.ByDate.Reverse }}
+      {{ partial "album-card.html" . }}
     {{ end }}
   </div>
 {{ end }}

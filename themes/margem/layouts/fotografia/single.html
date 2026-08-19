@@ -18,27 +18,56 @@
     {{- with .Description }}
     <p class="album-desc">{{ . }}</p>
     {{- end }}
-    {{- $photos := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
+    {{- $photos := .Resources.ByType "image" }}
     <span class="album-stats">
-      {{ .Date.Format "jan 2006" }}
+      {{- $meses := slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez" -}}
+      {{ index $meses (sub (int (.Date.Format "1")) 1) }} {{ .Date.Format "2006" }}
       {{- if $photos }} · {{ len $photos }} fotos{{ else }}{{- with .Params.photos_count }} · {{ . }} fotos{{ end }}{{ end }}
     </span>
   </div>
 
-  {{- $photos := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
+  {{- $photos := .Resources.ByType "image" }}
   {{- if $photos }}
   <div class="photos-grid" id="album-gallery">
-    {{ range $photos }}
-      {{- $thumb := .Resize "400x400 webp" }}
+    {{ range $index, $photo := $photos }}
+      {{- $thumb := .Resize "800x webp" }}
       {{- $full  := .Resize "1600x webp" }}
       <a class="photo-thumb"
          href="{{ $full.RelPermalink }}"
          data-pswp-width="{{ $full.Width }}"
          data-pswp-height="{{ $full.Height }}">
-        <img src="{{ $thumb.RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+        <img src="{{ $thumb.RelPermalink }}"
+             width="{{ $thumb.Width }}"
+             height="{{ $thumb.Height }}"
+             alt="{{ $.Title }}, foto {{ add $index 1 }} de {{ len $photos }}"
+             loading="lazy"
+             decoding="async">
       </a>
     {{ end }}
   </div>
+  <script>
+    (function () {
+      var ROW = 4, GAP = 4;
+      function masonry() {
+        var grid = document.getElementById('album-gallery');
+        if (!grid) return;
+        grid.querySelectorAll('.photo-thumb').forEach(function (item) {
+          item.style.gridRowEnd = '';
+          var h = item.querySelector('img').getBoundingClientRect().height;
+          if (h > 0)
+            item.style.gridRowEnd = 'span ' + Math.ceil((h + GAP) / (ROW + GAP));
+        });
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        masonry();
+        document.querySelectorAll('#album-gallery img').forEach(function (img) {
+          if (!img.complete) img.addEventListener('load', masonry);
+        });
+      });
+      var t;
+      window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(masonry, 120); });
+    })();
+  </script>
   {{- else }}
   <p style="color: var(--muted); font-size: 0.9rem;">Nenhuma foto encontrada neste álbum.</p>
   {{- end }}

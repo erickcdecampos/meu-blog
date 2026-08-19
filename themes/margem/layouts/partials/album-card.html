@@ -1,15 +1,26 @@
+{{- $photos := .Resources.ByType "image" -}}
 {{- $cover := .Resources.GetMatch "capa.*" | default (.Resources.GetMatch "cover.*") -}}
+{{- if and (not $cover) $photos -}}
+  {{- $cover = index $photos 0 -}}
+{{- end -}}
 <a class="album-card" href="{{ .RelPermalink }}">
   {{- if $cover }}
-    <img class="album-card-img" src="{{ ($cover.Resize "480x webp").RelPermalink }}" alt="{{ .Title }}" loading="lazy">
+    {{- $coverImage := $cover.Fill "960x720 Center webp" -}}
+    <img class="album-card-img"
+         src="{{ $coverImage.RelPermalink }}"
+         width="{{ $coverImage.Width }}"
+         height="{{ $coverImage.Height }}"
+         alt="Capa do álbum {{ .Title }}"
+         loading="lazy">
   {{- else }}
     <div class="album-card-placeholder"></div>
   {{- end }}
   <div class="album-card-overlay">
     <div class="album-card-title">{{ .Title }}</div>
     <div class="album-card-meta">
-      {{ .Date.Format "jan 2006" }}
-      {{- with .Params.photos_count }} · {{ . }} fotos{{ end }}
+      {{- $meses := slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez" -}}
+      {{ index $meses (sub (int (.Date.Format "1")) 1) }} {{ .Date.Format "2006" }}
+      {{- if $photos }} · {{ len $photos }} fotos{{ else }}{{ with .Params.photos_count }} · {{ . }} fotos{{ end }}{{ end }}
     </div>
   </div>
 </a>
