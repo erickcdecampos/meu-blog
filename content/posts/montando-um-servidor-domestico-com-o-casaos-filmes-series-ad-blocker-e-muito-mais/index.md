@@ -43,6 +43,8 @@ Esse tipo de servidor, normalmente, não vai precisar de monitor, mouse ou tecla
 
 Isso, se você quiser um servidor dedicado a função e/ou ligado 24/7. Caso prefira, também pode **rodar quase tudo isso em um computador com o Windows** mesmo. O passo a passo vai ser **bem diferente** (não vai ser necessário instalar o Ubuntu e o CasaOS, e a instalação dos add-ons não vai ser a partir da app store deste último), mas é perfeitamente possível e funcional.
 
+Além disso, aqui em casa eu incluí ao meu setup um [no-break](https://www.amazon.com.br/Nobreak-PREDATOR-Bivolt-Ragtech-4570/dp/B0BG6GD4L7/ref=asc_df_B0BG6GD4L7?mcid=04ff363e98143b27b875513aedfbe327&tag=googleshopp00-20&linkCode=df0&hvadid=709884703642&hvpos=&hvnetw=g&hvrand=10006807900300635057&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9257517&hvtargid=pla-1930012292795&psc=1&hvocijid=10006807900300635057-B0BG6GD4L7-&hvexpln=0&language=pt_BR). HDs não gostam de serem desligados inesperadamente e, como eu fiz do meu servidor um backup das minhas fotos, todo cuidado é pouco. 
+
 ## o software
 
 No passado, com o RaspberryPi, minha stack era basicamente o LibreELEC como sistema operacional + add-ons do Kodi que faziam todo o trabalho sujo. Cheguei a testar o RetroPie, OpenMediaVault e algumas outras distros, mas o LibreELEC me ganhou por se mostrar mais prático e estável.
@@ -182,9 +184,9 @@ Aqui vai um resumo do que cada app faz, pra você entender como eles se conectam
 * **Transmission** : o cliente de torrent que vai baixar os arquivos. O Radarr e o Sonarr mandam os pedidos pra ele. O qBitTorrent costuma ser o mais recomendado, mas por força do hábito sigo com o Transmission.
 * **Radarr** : gerencia os filmes. Você adiciona um título, ele procura automaticamente e baixa.
 * **Sonarr** : faz o mesmo, mas com séries. Funciona até com episódios semanais.
-* **Jackett** : serve como "ponte" entre os apps e os sites de torrent. É ele que permite que o Radarr e o Sonarr encontrem conteúdo nos sites certos.
+* **Prowlarr** : serve como "ponte" entre os apps e os sites de torrent. É ele que permite que o Radarr e o Sonarr encontrem conteúdo nos sites certos.
 * **Bazarr** : cuida das legendas. Busca e sincroniza automaticamente para filmes e séries.
-* **Emby** : é o seu streaming pessoal. Interface bonitinha, apps para TV, celular, navegador... tudo sob seu controle.
+* **Emby** ou **Jellyfin**: é o seu streaming pessoal. Interface bonitinha, apps para TV, celular, navegador... tudo sob seu controle.
 
 Parece muita coisa e realmente exige um tempinho para configurar tudo. Mas depois de configurado uma vez, a manutenção é mínima e você pode esquecê-lo por meses, juro!
 
@@ -228,13 +230,13 @@ Depois disso, nas configurações internas dos apps, vamos apontar para o caminh
   * Em **Download to** , defina a pasta ``/media/devmon/`hdexterno`/``downloads/complete
   * Ative a opção de pasta temporária e aponte a pasta `/media/devmon/hdexterno/`downloads/incomplete.
   * Ative a opção de iniciar os torrents automaticamente
-  * Adicionalmente, costumo colocar um **limite de velocidade durante parte do dia**. Como ele está conectado diretamente ao roteador, pode roubar uma fatia significativa da minha banda. Por isso, coloco um limite de 2 MB/s (aproximadamente 10% dos meus 500 Mbps) das 7 da manhã a 00h. Assim, não impacto em nada os outros dispotivos.
+  * Adicionalmente, costumo colocar um **limite de velocidade durante parte do dia**. Como ele está conectado diretamente ao roteador, pode roubar uma fatia significativa da minha banda. Por isso, coloco um limite de 5 MB/s (um pouco menos de 10% dos meus 500 Mbps) das 7 da manhã a 00h. Assim, não impacto em nada os outros dispotivos.
 
 ## baixando e organizando filmes com o Radarr
 
-Para gerenciar nossos filmes, vamos usar o Radarr. Ele serve não só para baixar novas obras, mas também para catalogar o que já temos baixado e desorganizado.
+Para gerenciar nossos filmes, vamos usar o Radarr. Ele faz parte da suíte ARR, um ecossistema de softwares de mídia open source e que conversam entre si de maneira simplificada.
 
-Outra funcionalidade que eu adoro também é a automatição de download de filmes a partir de listas. Logo chegaremos lá.
+Ele serve não só para baixar novas obras, mas também para catalogar o que já temos baixado e desorganizado. Outra funcionalidade que eu adoro também é a automação de download de filmes a partir de listas. Logo chegaremos lá.
 
 Para começar:
 
@@ -257,81 +259,176 @@ Aqui é onde se define como os filmes serão organizados. Para mais detalhes, su
 
 Podemos personalizar a qualidade dos filmes que serão baixados. Eu sugiro fortemente bloquear filmes em 3D e BR-Disk, que são extremamente pesados e vão lotar seu HD num piscar de olhos.
 
-Para mais detalhes, consulte novamente o [passo a passo do r/Pirataria](https://www.reddit.com/r/pirataria/comments/18ch7bt/guia_do_streaming_doméstico_automatizado_sonarr/).
+Para mais detalhes, sugiro consultar o [passo a passo do r/Pirataria](https://www.reddit.com/r/pirataria/comments/18ch7bt/guia_do_streaming_doméstico_automatizado_sonarr/).
 
 ### Download Client
 
-Precisamos indicar para o Raddar que os downloadas serão feitos via Transmission. Acesse a aba Download Cliente e adicione o Transmission, inserindo a `http://localhost:9091/transmission/rpc`
-
-* Login e senha, se configurados
+Precisamos indicar para o Raddar que os downloadas serão feitos via Transmission. Acesse a aba Download Cliente e adicione o Transmission, inserindo a `http://localhost:9091/transmission/rpc e l`ogin e senha, se configurados.
 
 ### Listas
 
 Uma das minhas partes favoritas é a automação que **baixa automaticamente filmes que entram na minha watchlist do Letterboxd**. Além dessa lista, é possível fazer o mesmo com praticamente qualquer coisa do Letterboxd (de listas comuns, de qualquer usuário, a filmografias completas de um artista), listas do IMDb, Trakt ou outros sites.
 
-Basta converter uma lista para RSS com ferramentas como `letterboxd-list-radarr.onrender.com`.
+Basta converter uma lista para RSS com ferramentas como [`letterboxd-list-radarr.onrender.com`](https://letterboxd-list-radarr.onrender.com).
 
 - - -
 
 ## configurando o Sonarr
 
-* Instale e acesse via `http://SEU_IP:8989`
+Sonarr é a solução ARR para séries. Depois de primeiro, a configuração dos seguintes fica mais intuitiva e segue mais ou menos o mesmo roteiro.
+
+* Instale e acesse via `http://SEU_IP:8989 (cada um dos apps tem a sua porta específica)`
 * Altere o idioma da interface para PT-BR
 * Configure Media Management e adicione a pasta raiz `/tv`
 * Ajuste os perfis de qualidade e idioma da mesma forma que no Radarr
 * Configure o Transmission como cliente de download
 
+Para mais detalhes, sugiro consultar o passo a passo do r/Pirataria.
+
 - - -
 
-## adicionando os indexadores com o Jackett
+## adicionando os indexadores com o Prowlarr
 
-* Instale o Jackett e acesse via `http://SEU_IP:9117`
-* Na interface do Jackett:
+O Prowlarr é quem faz a ponte entre o Radarr/Sonarr e os sites onde eles vão procurar os torrents. A grande vantagem é que você configura os indexadores **uma única vez** nele e o Prowlarr se encarrega de sincronizá-los automaticamente com os outros aplicativos.
 
-  * Clique em "Add Indexer"
-  * Pesquise os sites de torrent que você quer adicionar. Existem vários públicos gratuitos (como 1337x, RARBG, etc.), mas você também pode usar indexadores privados, se tiver acesso.
-  * Para cada indexador, clique em "Copy Torznab Feed". Esse link é o que você vai usar no Radarr e Sonarr.
-* Depois, volte ao Radarr e Sonarr:
+* Instale o **Prowlarr** pela App Store e acesse pelo navegador em `http://SEU_IP:9696`.
+* Vá até **Indexers > Add Indexer** e pesquise os indexadores que deseja utilizar, tem alguns mais específicos e outros que tem de tudo. Existem opções públicas e privadas, estas últimas normalmente exigem uma conta, API Key ou outras credenciais. Aqui, uso somente indexadores públicos e minha única dificuldade é encontrar filmes brasileiros mais antigos.
+* Adicione os indexadores desejados e use o botão **Test** para verificar se estão funcionando antes de salvar.
 
-  * Em Settings > Indexers > Add Torznab
-  * Cole a URL copiada do Jackett, dê um nome qualquer, e insira a API Key que aparece no topo do Jackett
+![](imagem_2026-08-30_172242295.png)
+
+Agora precisamos conectar o Prowlarr ao Radarr e ao Sonarr:
+
+* Vá em **Settings > Apps**.
+* Clique no botão **+** e escolha **Radarr**.
+* Dê um nome qualquer à conexão.
+* Em **Prowlarr Server**, informe `http://SEU_IP:9696`.
+* Em **Radarr Server**, informe `http://SEU_IP:7878`.
+* Copie a **API Key** disponível em `Settings > General` no Radarr e cole no Prowlarr (já deixe essas chaves num bloco de notas pois iremos usá-las novamente).
+* Clique em **Test** e, se estiver tudo certo, salve.
+* Repita o processo para o **Sonarr**, usando `http://SEU_IP:8989` e a API Key dele.
+
+Eu deixo o **Sync Level** como `Full Sync`. Assim, sempre que você adicionar, remover ou alterar um indexador no Prowlarr, essas mudanças serão automaticamente replicadas para o Radarr e Sonarr.
+
+Se tudo deu certo, ao abrir **Settings > Indexers** no Radarr ou Sonarr você deverá encontrar os indexadores cadastrados pelo Prowlarr por lá, normalmente identificados com `(Prowlarr)` no nome.
+
+A partir daí, você praticamente pode esquecer essa configuração. Quando o Radarr ou Sonarr procurar alguma coisa, eles consultarão automaticamente os indexadores gerenciados pelo Prowlarr.
+
+> **Opcional: FlareSolverr.** Alguns indexadores usam proteções do Cloudflare que podem impedir o acesso automatizado pelo Prowlarr. Nesses casos, o **FlareSolverr** funciona como um intermediário, usando um navegador automatizado para contornar esse bloqueio. Ele não é necessário para todos os indexadores, então só vale instalar se algum deles exigir.
 
 - - -
 
 ## configurando o Bazarr (legendas)
 
-* Instale e acesse via `http://SEU_IP:6767`
-* Em Settings:
+O **Bazarr** completa a nossa automação cuidando das legendas. Ele se integra ao Radarr e ao Sonarr, identifica os filmes e episódios da biblioteca, procura as legendas e salva junto dos arquivos de vídeo.
 
-  * Ative integração com Sonarr e Radarr (insira as APIs de ambos)
-  * Configure o idioma como "Brazilian Portuguese"
-  * Ative a opção de sincronizar automaticamente legendas com os vídeos
+* Instale e acesse pelo navegador em `http://SEU_IP:6767`.
+* Em **Settings > Sonarr** e **Settings > Radarr**, ative as integrações e informe o IP, porta e API Key de cada aplicativo.
+* Em **Settings > Languages**, adicione **Brazilian Portuguese** e crie um perfil de idioma em português ou as línguas que desejar. Você também pode adicionar inglês como segunda opção, caso queira.
+* Defina esse perfil como padrão para novos filmes e séries.
+* Em **Settings > Subtitles**, deixe as legendas sendo salvas **junto dos arquivos de vídeo** e, se quiser, ative a sincronização automática.
 
-Em Providers, adicione sua conta do OpenSubtitles.com. Ele é um dos mais completos e funciona bem para PT-BR.
+### escolhendo os providers
+
+Em **Settings > Providers** ficam os serviços nos quais o Bazarr vai procurar as legendas. Vale configurar **mais de um**, já que o acervo varia bastante entre eles e eventualmente algum pode ficar indisponível.
+
+Para quem procura legendas em português, boas opções disponíveis atualmente são:
+
+* **OpenSubtitles.com** — enorme acervo internacional e bastante conteúdo em PT-BR;
+* **Legendas.net** — sucessor espiritual do saudoso legendas.tv, focado em legendas brasileiras;
+
+Alguns deles exigem que você crie uma conta gratuitamente e informe usuário e senha no Bazarr.
+
+Depois disso, é praticamente só esquecer que ele existe. Quando um filme ou episódio novo chegar pelo Radarr ou Sonarr, o Bazarr vai procurar uma legenda que corresponda à versão baixada e colocá-la ao lado do vídeo automaticamente.
+
+**Uma dica:** se você instalou o Bazarr depois de já ter uma biblioteca montada, pode ser necessário usar o **Mass Edit** para aplicar seu perfil de idioma aos filmes e séries que já existiam.
 
 - - -
 
-## configurando o Emby
+## finalmente, montando nosso streaming com Emby ou Jellyfin
 
-* Instale pela App Store
-* Acesse via navegador e crie seu usuário
-* Em Biblioteca, adicione:
+Até aqui, montamos uma bela linha de produção: Radarr e Sonarr sabem o que queremos assistir, o Prowlarr encontra onde baixar, o Transmission faz o download e o Bazarr corre atrás das legendas.
 
-  * `/movies` como "Filmes"
-  * `/tv` como "Séries"
+Falta agora a parte mais importante: **assistir às coisas**.
 
-A interface é super intuitiva. Você pode assistir de qualquer lugar da rede (ou até fora dela, se configurar acesso remoto).
+Para isso, precisamos de um *media server*. Ele vai vasculhar nossas pastas, identificar filmes e séries, baixar capas, sinopses e outras informações e transformar aquela montoeira de arquivos em uma interface bonitinha, acessível pela TV, celular, navegador ou praticamente qualquer outro dispositivo.
+
+As duas opções que recomendo são **Emby** e **Jellyfin**. Os dois são bastante parecidos - não por acaso, o Jellyfin nasceu originalmente a partir do código do Emby - e cumprem basicamente a mesma função.
+
+Eu uso o **Emby** desde antes do Jellyfin existir, mas esse último talvez combine ainda mais com o espírito desse projeto: ele é completamente gratuito e open source, sem recursos escondidos atrás de assinatura. O Emby também pode ser usado gratuitamente, mas alguns recursos mais avançados, como transcodificação acelerada por hardware, downloads para assistir offline e algumas funções dos apps fazem parte do **Emby Premiere**. Eu não pago a assinatura, mas não faz falta, porém tive que pagar (acho que R$10, já te uns 7 anos) pelo app para Android TV.
+
+### instalando
+
+Escolha um dos dois e instale pela App Store do CasaOS.
+
+Antes de iniciar, lembre-se de liberar para ele as pastas onde estão suas mídias. Por exemplo:
+
+* `/media/devmon/hdexterno/filmes` → `/movies`
+* `/media/devmon/hdexterno/series` → `/tv`
+
+Se também tiver músicas, shows, documentários ou qualquer outra coleção separada, pode disponibilizar essas pastas da mesma maneira.
+
+Depois disso, abra o aplicativo pelo CasaOS ou diretamente pelo navegador. Tanto Emby quanto Jellyfin usam, por padrão, a porta `8096`, então o endereço normalmente será `http://SEU_IP:8096`. Na primeira abertura, um assistente vai pedir para você criar um usuário administrador e configurar sua biblioteca.
+
+### criando as bibliotecas
+
+Crie uma biblioteca para cada tipo de mídia e indique as pastas que disponibilizamos para o container:
+
+* **Filmes** → `/movies`
+* **Séries** → `/tv`
+* **Música** → `/music`, se tiver
+* e assim por diante.
+
+É importante escolher corretamente o **tipo de conteúdo** de cada biblioteca. Isso ajuda o servidor a identificar os arquivos e buscar capas, sinopses, elenco, ano de lançamento e outras informações nos bancos de dados online. Também vale selecionar **Português do Brasil** como idioma preferido dos metadados.
+
+Depois de salvar, ele fará uma primeira varredura. Dependendo do tamanho da coleção pode levar alguns minutos, mas você já deve começar a ver seus arquivos ganhando cara de catálogo de streaming.
+
+E o melhor: como Radarr e Sonarr continuam colocando novos arquivos nessas mesmas pastas, **os novos downloads vão aparecendo automaticamente no Emby/Jellyfin**.
+
+### e as legendas?
+
+Como já configuramos o Bazarr, ele salva as legendas junto do arquivo de vídeo. O Emby ou Jellyfin normalmente vai encontrá-las automaticamente e disponibilizá-las no player.
+
+É justamente aí que toda aquela configuração anterior começa a fazer sentido: você adiciona um filme no Radarr, ele é encontrado, baixado, organizado, recebe sua legenda e, algum tempo depois, simplesmente aparece na tela da sua TV pronto para assistir.
+
+### instalando nas TVs e celulares
+
+Agora basta procurar **Emby** ou **Jellyfin** na loja de aplicativos da sua TV, celular ou outro dispositivo.
+
+Na primeira abertura, o aplicativo pedirá o endereço do servidor. Dentro de casa, basta usar novamente algo como:
+
+`http://192.168.X.X:8096`
+
+Crie também usuários separados para as outras pessoas da casa. Além de manter histórico e progresso individuais, é possível determinar quais bibliotecas cada usuário pode acessar.
+
+### direct play e transcoding
+
+Uma última coisa que vale entender é a diferença entre **Direct Play** e **transcoding**.
+
+Sempre que possível, o Emby/Jellyfin simplesmente envia o arquivo original para o dispositivo. Isso é o **Direct Play** e praticamente não exige esforço do servidor.
+
+Se a TV ou celular não conseguir reproduzir aquele formato, codec, resolução ou até determinado tipo de legenda, o servidor pode precisar **converter o vídeo em tempo real** para algo compatível. Isso é transcoding e exige bem mais processamento.
+
+Por isso, se seu servidor é um computador mais modesto, vale priorizar arquivos em formatos amplamente compatíveis e tentar conseguir Direct Play sempre que possível.
+
+### assistindo fora de casa
+
+Até aqui, tudo funciona dentro da sua rede doméstica. Também é possível acessar sua biblioteca pela internet, mas eu não recomendo simplesmente abrir a porta `8096` do roteador e deixar o servidor exposto.
+
+Para acesso remoto, soluções como **VPNs privadas** ou uma configuração adequada de HTTPS/reverse proxy são opções mais seguras, mas isso já merece uma seção própria.
+
+Pronto. Agora temos nosso próprio streaming: catálogo, capas, sinopses, histórico, usuários, legendas e aplicativos para TV e celular — só que os arquivos são nossos e o servidor também.
 
 - - -
 
-Com tudo isso funcionando, você tem um sistema que:
+Com tudo isso funcionando, já temos um sistema que:
 
 * Busca automaticamente os filmes e séries que você quer ver
 * Baixa, organiza e renomeia os arquivos
 * Busca e sincroniza legendas
-* Exibe tudo com uma interface linda no Emby
+* Exibe tudo com uma interface bonita e prática, em todos os nossos dispositivos
 
-Streaming 100% sob seu controle, sem mensalidade, sem depender de serviços de terceiros e com aquele gostinho de projeto feito por você mesmo.
+E o melhor, tudo 100% sob nosso controle, sem mensalidade e com aquele gostinho de projeto feito por você mesmo. Por mais que essas configurações exijam algumas horas, esses softwares são bastante estáveis e a manutenção é simples. 
 
 Curtiu? Então se prepara, porque isso é só o começo.
 
